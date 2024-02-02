@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Compramos Seu Carro</title>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <meta content="Webflow" name="generator"/>
+        <link href="{% static 'css/fazauto-seminovos-front-end.webflow.db601ee18.css' %}" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com" rel="preconnect"/>
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+        <link href="https://assets-global.website-files.com/img/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+        <link href="https://assets-global.website-files.com/img/webclip.png" rel="apple-touch-icon"/>
+        <style>
+            .uui-button-secondary-gray:hover {
+        background-color: black;
+    }
+    .uui-button-3:hover {
+        background-color: black;
+    }
+        </style>
+    </head>
+    <body>
+        <div data-w-id="7ed80063-4a4a-6d58-f8b7-159b4abb7add" data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="uui-navbar01_component w-nav">
+            <div class="uui-navbar01_container">
+                <a href="#" class="uui-navbar01_logo-link w-nav-brand">
+                    <div class="uui-logo_component">
+                        <img src="{% static 'images/65b3c0032b80c03dc484bbdd_fazauto.png' %}" loading="lazy" alt="Compramos Seu Carro" class="uui-logo_logotype"/>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <section class="uui-section_contact01">
+            <div class="uui-page-padding-2">
+                <div class="uui-container-small"></div>
+            </div>
+        </section>
+        <section class="uui-section_contact02">
+            <div class="uui-page-padding-3">
+                <div class="uui-container-small-2">
+                    <div class="uui-padding-vertical-xhuge-3">
+                        <div class="uui-text-align-center-2">
+                            <div class="uui-max-width-large-3 align-center">
+                                <div class="uui-heading-subheading-3">
+                                    <strong>AVALIAÇÃO</strong>
+                                </div>
+                                <div class="uui-space-xsmall-3"></div>
+                            </div>
+                        </div>
+                        <div class="uui-contact02_component w-form">
+                            <form id="wf-form-Contact-02-form" action="{% url 'fipe_app:step_2' %}" method="post" class="uui-contact02_form">
+                                {% csrf_token %}
+
+                                <div class="form-field-2col">
+                                    <!-- Tipo de Veículo -->
+                                    <div class="uui-form-field-wrapper-2">
+                                        <label for="id_vehicle_type" class="uui-field-label-2" style="color: #000;">Tipo de Veículo</label>
+                                        <select id="id_vehicle_type" name="vehicle_type" class="uui-form_input-3 select w-select">
+                                            <option value="">Selecionar Tipo de Veículo</option>
+                                            {% for vehicle_type in vehicle_types %}
+                                            <option value="{{ vehicle_type.id }}">{{ vehicle_type.get_vehicle_type_display }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Marca -->
+                                    <div class="uui-form-field-wrapper-2">
+                                        <label for="id_brand" class="uui-field-label-2" style="color: #000;">Marca</label>
+                                        <select id="id_brand" name="brand" class="uui-form_input-3 select w-select">
+                                            <option value="">Selecionar</option>
+                                            <!-- Opções carregadas dinamicamente -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-field-2col">
+                                    <!-- Modelo -->
+                                    <div class="uui-form-field-wrapper-2">
+                                        <label for="id_model" class="uui-field-label-2" style="color: #000;">Modelo</label>
+                                        <select id="id_model" name="model" class="uui-form_input-3 select w-select">
+                                            <option value="">Selecionar</option>
+                                            <!-- Opções carregadas dinamicamente -->
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Ano -->
+                                    <div class="uui-form-field-wrapper-2">
+                                        <label for="id_year" class="uui-field-label-2" style="color: #000;">Ano</label>
+                                        <select id="id_year" name="year" class="uui-form_input-3 select w-select">
+                                            <option value="">Selecionar</option>
+                                            <!-- Opções carregadas dinamicamente -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Combustível -->
+                                <div class="uui-form-field-wrapper-2">
+                                    <label for="id_fuel" class="uui-field-label-2" style="color: #000;">Combustível</label>
+                                    <select id="id_fuel" name="fuel" class="uui-form_input-3 select w-select">
+                                        <option value="">Selecionar</option>
+                                        <!-- Opções carregadas dinamicamente -->
+                                    </select>
+                                </div>
+
+                                <div class="uui-form-button-wrapper-2">
+                                    <input type="submit" style="color: white;" class="uui-button-3 w-button" value="AVANÇAR"/>
+                                </div>
+                            </form>
+                            <div class="success-message-2 w-form-done">
+                                <div class="success-text-2">Thank you! Your submission has been received!</div>
+                            </div>
+                            <div class="error-message-2 w-form-fail">
+                                <div class="error-text-2">Oops! Something went wrong while submitting the form.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="{% static 'js/script_form.js' %}"></script>
+    </body>
+</html>

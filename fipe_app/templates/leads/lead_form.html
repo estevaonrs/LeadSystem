@@ -1,0 +1,24 @@
+{% load static %}
+<form method="post" action="{% url 'fipe_app:lead_form' %}" id="lead-form">
+    {% csrf_token %}
+    
+    {% for field in lead_form %}
+        <div class="{{ field.name }}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div class="error">
+                    {{ field.errors.as_ul }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <button type="submit">Avançar</button>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{% static 'js/script_form.js' %}"></script>
+
+
