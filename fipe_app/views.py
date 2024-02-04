@@ -119,7 +119,7 @@ def step_3(request):
         MERCADO_QUEIMADO = ['Legend 3.2/3.5', 'Modelo9']
 
         # Determinando a categoria de carro baseada na quilometragem
-        categoria_carro = "Repasse" if mileage > 75000 else "Salão"
+        car_category = "Repasse" if mileage > 75000 else "Salão"
 
         # Criando o objeto Lead
         lead = Lead(
@@ -133,7 +133,7 @@ def step_3(request):
             model_id=lead_data.get('model'),
             year_id=lead_data.get('year'),
             fuel_id=lead_data.get('fuel'),
-            categoria_carro=categoria_carro
+            car_category=car_category
         )
 
         # Buscando a instância de preço correspondente
@@ -157,24 +157,33 @@ def step_3(request):
                 mercado_queimado_normalized = [m.lower().strip() for m in MERCADO_QUEIMADO]
 
                 applied_percentage = None  # Inicializando applied_percentage
+                market_category = ""
 
-                # Determinando a categoria de mercado e porcentagem de precificação
-                if model_name in bom_mercado_normalized:
-                    price_value *= 0.82
-                    applied_percentage = 82  # Porcentagem de precificação para Bom de Mercado
-                    categoria_mercado = "Bom de Mercado"
-                elif model_name in ruim_mercado_normalized:
-                    price_value *= 0.72
-                    applied_percentage = 72  # Porcentagem de precificação para Ruim de Mercado
-                    categoria_mercado = "Ruim de Mercado"
-                elif model_name in mercado_queimado_normalized:
-                    price_value *= 0.50
-                    applied_percentage = 50  # Porcentagem de precificação para Queimado no Mercado
-                    categoria_mercado = "Queimado no Mercado"
+                if mileage <= 75000:
+                    if model_name in bom_mercado_normalized:
+                        price_value *= 0.82
+                        applied_percentage = Decimal('82') / 100  # Porcentagem de precificação para Bom de Mercado
+                        market_category = "Bom de Mercado"
+                    elif model_name in ruim_mercado_normalized:
+                        price_value *= 0.72
+                        applied_percentage = Decimal('72') / 100  # Porcentagem de precificação para Ruim de Mercado
+                        market_category = "Ruim de Mercado"
+                    elif model_name in mercado_queimado_normalized:
+                        price_value *= 0.50
+                        applied_percentage = Decimal('50') / 100  # Porcentagem de precificação para Queimado no Mercado
+                        market_category = "Queimado no Mercado"
+                    elif mileage <= 75000:
+                        price_value *= 0.75
+                        applied_percentage = Decimal('75') / 100  # Porcentagem de precificação para Relativo de Mercado
+                        market_category = "Relativo de Mercado"
+                elif mileage > 75000 and market_category == "":
+                    price_value *= 0.62
+                    applied_percentage = Decimal('62') / 100  # Porcentagem de precificação para Acima de 75k km
+                    market_category = "Repasse"
                 
                 lead.original_price = original_price_value
-                lead.porcentagem_precificacao = applied_percentage
-                lead.categoria_mercado = categoria_mercado
+                lead.pricing_percentage = applied_percentage
+                lead.market_category = market_category
                 lead.price = price_value
                 lead.save()
 
@@ -188,6 +197,7 @@ def step_3(request):
 
     # Renderizar o formulário para entrada dos dados finais
     return render(request, 'leads/step-three-form.html')
+
 
 
 class LeadViewSet(viewsets.ModelViewSet):
