@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class FipeVehicleType(models.Model):
     vehicle_type = models.CharField(max_length=100)
@@ -266,6 +267,7 @@ class Lead(models.Model):
     car_category = models.CharField(max_length=50, null=True, blank=True)
     original_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     pricing_percentage = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now, editable=False)  # Adicione este campo
 
     def __str__(self):
         return f"{self.name} - {self.email} - {self.phone}"

@@ -24,7 +24,7 @@ class FipePriceAdmin(admin.ModelAdmin):
 
 
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'price', 'market_category', 'car_category', 'original_price', 'pricing_percentage')
+    list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'price', 'market_category', 'car_category', 'original_price', 'pricing_percentage', 'created_at')
 
 
 admin.site.register(Lead, LeadAdmin)

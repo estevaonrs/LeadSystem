@@ -114,9 +114,9 @@ def step_3(request):
         mileage = int(lead_data.get('mileage', 0))
 
         # Listas de categorias de mercado
-        BOM_MERCADO = ['NSX 3.0', 'Modelo3']
-        RUIM_MERCADO = ['Integra GS 1.8', 'Modelo5', 'Modelo6']
-        MERCADO_QUEIMADO = ['Legend 3.2/3.5', 'Modelo9']
+        BOM_MERCADO = ['NSX 3.0']
+        RUIM_MERCADO = ['Integra GS 1.8']
+        MERCADO_QUEIMADO = ['Legend 3.2/3.5']
 
         # Determinando a categoria de carro baseada na quilometragem
         car_category = "Repasse" if mileage > 75000 else "Salão"
@@ -176,10 +176,15 @@ def step_3(request):
                         price_value *= 0.75
                         applied_percentage = Decimal('75') / 100  # Porcentagem de precificação para Relativo de Mercado
                         market_category = "Relativo de Mercado"
-                elif mileage > 75000 and market_category == "":
-                    price_value *= 0.62
-                    applied_percentage = Decimal('62') / 100  # Porcentagem de precificação para Acima de 75k km
-                    market_category = "Repasse"
+                elif mileage > 75000:
+                    if model_name in mercado_queimado_normalized:
+                        price_value *= 0.50
+                        applied_percentage = Decimal('50') / 100  # Porcentagem de precificação para Queimado no Mercado
+                        market_category = "Queimado no Mercado"
+                    else:
+                        price_value *= 0.62
+                        applied_percentage = Decimal('62') / 100  # Porcentagem de precificação para Acima de 75k km
+                        market_category = "Repasse"
                 
                 lead.original_price = original_price_value
                 lead.pricing_percentage = applied_percentage
