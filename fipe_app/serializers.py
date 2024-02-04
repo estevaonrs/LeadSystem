@@ -4,7 +4,7 @@ from .models import Lead
 class LeadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lead
-        fields = '__all__'
+        fields = '__all__'  # This ensures all fields are used, including the new ones
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -13,8 +13,9 @@ class LeadSerializer(serializers.ModelSerializer):
         representation['model'] = instance.model.model
         representation['year'] = instance.year.year
         representation['fuel'] = instance.fuel.fuel
-        # Since categoria_mercado and categoria_carro are string fields, just assign them directly
-        representation['categoria_mercado'] = instance.categoria_mercado
-        representation['categoria_carro'] = instance.categoria_carro
+        representation['market_category'] = instance.market_category
+        representation['car_category'] = instance.car_category
+        representation['original_price'] = instance.original_price
+        representation['pricing_percentage'] = instance.pricing_percentage
 
         return representation
