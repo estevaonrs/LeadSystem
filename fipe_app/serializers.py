@@ -2,9 +2,11 @@ from rest_framework import serializers
 from .models import Lead
 
 class LeadSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
     class Meta:
         model = Lead
-        fields = '__all__'  # This ensures all fields are used, including the new ones
+        fields = '__all__'
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -17,5 +19,7 @@ class LeadSerializer(serializers.ModelSerializer):
         representation['car_category'] = instance.car_category
         representation['original_price'] = instance.original_price
         representation['pricing_percentage'] = instance.pricing_percentage
-
         return representation
+
+    def get_created_at(self, instance):
+        return instance.created_at.strftime('%d/%m/%Y')
