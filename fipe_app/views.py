@@ -1,11 +1,14 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect, get_object_or_404
+
+from fipe_app.serializers import LeadSerializer
 from .forms import LeadForm
 from django.http import JsonResponse
 from .models import FipeBrand, FipeModel, FipePrice, Lead, FipeFuel, FipeYear, FipeVehicleType, Lead
 from django.contrib.humanize.templatetags.humanize import intcomma
 from .models import CITY_CHOICES
 import re
+from rest_framework import viewsets
 
 
 def get_brands(request, vehicle_type_id):
@@ -115,10 +118,13 @@ def step_3(request):
         RUIM_MERCADO = ['Integra GS 1.8', 'Modelo5', 'Modelo6']
         MERCADO_QUEIMADO = ['Legend 3.2/3.5', 'Modelo9']
 
+        # Determinando a categoria de carro baseada na quilometragem
+        categoria_carro = "Repasse" if mileage > 75000 else "Salão"
+
         # Criando o objeto Lead (ajuste conforme a sua implementação de modelos)
         lead = Lead(
             city=lead_data.get('city'),
-            mileage=mileage,  # Usando a variável convertida para int
+            mileage=mileage,
             name=name,
             email=email,
             phone=phone,
@@ -126,7 +132,8 @@ def step_3(request):
             brand_id=lead_data.get('brand'),
             model_id=lead_data.get('model'),
             year_id=lead_data.get('year'),
-            fuel_id=lead_data.get('fuel')
+            fuel_id=lead_data.get('fuel'),
+            categoria_carro=categoria_carro  # Novo campo adicionado
         )
 
         # Buscando a instância de preço correspondente
@@ -149,34 +156,23 @@ def step_3(request):
                 ruim_mercado_normalized = [m.lower().strip() for m in RUIM_MERCADO]
                 mercado_queimado_normalized = [m.lower().strip() for m in MERCADO_QUEIMADO]
 
-                category = "N/A"  # Categoria de mercado inicial
-                applied_percentage = "N/A"  # Percentual aplicado inicial
-
-                # Determinando o ajuste de preço baseado em quilometragem e categoria de mercado
-                if mileage <= 75000:
-                    if model_name in bom_mercado_normalized:
-                        price_value *= 0.82
-                        category = "Bom Mercado"
-                        applied_percentage = "82%"
-                    elif model_name in ruim_mercado_normalized:
-                        price_value *= 0.72
-                        category = "Ruim Mercado"
-                        applied_percentage = "72%"
-                if model_name in mercado_queimado_normalized:
+                # Determinando a categoria de mercado
+                categoria_mercado = None
+                if model_name in bom_mercado_normalized:
+                    price_value *= 0.82
+                    categoria_mercado = "Bom de Mercado"
+                elif model_name in ruim_mercado_normalized:
+                    price_value *= 0.72
+                    categoria_mercado = "Ruim de Mercado"
+                elif model_name in mercado_queimado_normalized:
                     price_value *= 0.50
-                    category = "Mercado Queimado"
-                    applied_percentage = "50%"
-                elif mileage > 75000 and category == "N/A":
-                    price_value *= 0.62
-                    category = "Acima de 75k km"
-                    applied_percentage = "62%"
+                    categoria_mercado = "Queimado no Mercado"
 
-                # Imprime informações no console
-                print(f"Modelo: {model_name}, Categoria: {category}, Percentual: {applied_percentage}, Preço Original: R$ {original_price}, Preço Ajustado: R$ {price_value}")
-
-                # Ajustando o preço do lead
+                # Ajustando o preço e salvando as categorias no objeto lead
+                lead.categoria_mercado = categoria_mercado
                 lead.price = price_value
                 lead.save()
+                
                 return redirect('fipe_app:show_price', lead_id=lead.id)
             except ValueError:
                 # Tratamento de erro de formato de preço
@@ -189,5 +185,11 @@ def step_3(request):
     return render(request, 'leads/step-three-form.html')
 
 
+class LeadViewSet(viewsets.ModelViewSet):
+    queryset = Lead.objects.all()
+    serializer_class = LeadSerializer
 
+    def get_queryset(self):
+        # Se você quiser filtrar os dados, pode fazer isso aqui
+        return self.queryset
 

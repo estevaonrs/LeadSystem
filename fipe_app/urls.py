@@ -1,9 +1,12 @@
-# urls.py
-
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import show_price, get_brands, get_models, get_years, get_fuels, index_view, step_1, step_2, step_3
+from .views import show_price, get_brands, get_models, get_years, get_fuels, index_view, step_1, step_2, step_3, LeadViewSet
 
 app_name = 'fipe_app'
+
+router = DefaultRouter()
+router.register(r'leads', LeadViewSet)
 
 urlpatterns = [
     path('', index_view, name='index'),
@@ -15,4 +18,6 @@ urlpatterns = [
     path('get_models/<int:brand_id>/<int:vehicle_type_id>/', get_models, name='get_models'),
     path('get_years/<int:model_id>/', get_years, name='get_years'),
     path('get_fuels/<int:year_id>/', get_fuels, name='get_fuels'),
+    path('api/', include(router.urls)),
+
 ]
