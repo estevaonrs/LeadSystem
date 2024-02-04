@@ -56,7 +56,12 @@
                                 <div class="form-field-2col">
                                     <div class="uui-form-field-wrapper-2">
                                         <label for="city" class="uui-field-label-2" style="color: #000;">Cidade</label>
-                                        <input class="uui-form_input-3 w-input" name="city" placeholder="Preencha sua Cidade" type="text" id="city" required=""/>
+                                        <select class="uui-form_input-3 w-input" name="city" id="city" required="">
+                                            <option value="">Selecione sua cidade</option>
+                                            {% for code, name in CITY_CHOICES %}
+                                            <option value="{{ code }}">{{ name }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-field-2col">

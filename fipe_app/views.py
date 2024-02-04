@@ -4,7 +4,7 @@ from .forms import LeadForm
 from django.http import JsonResponse
 from .models import FipeBrand, FipeModel, FipePrice, Lead, FipeFuel, FipeYear, FipeVehicleType, Lead
 from django.contrib.humanize.templatetags.humanize import intcomma
-
+from .models import CITY_CHOICES
 import re
 
 
@@ -68,8 +68,9 @@ def step_1(request):
         mileage = request.POST.get('mileage')
         request.session['lead_data'] = {'city': city, 'mileage': mileage}
         return redirect('fipe_app:step_2')
-    return render(request, 'leads/step-one-form.html')
-
+    else:
+        context = {'CITY_CHOICES': CITY_CHOICES}  # Adiciona CITY_CHOICES ao contexto
+        return render(request, 'leads/step-one-form.html', context)
 
 def step_2(request):
     if request.method == 'POST':

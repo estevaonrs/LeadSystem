@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FipeVehicleType, FipeBrand, FipeModel, FipeYear, FipeFuel, FipeCodeFipe, FipePrice, FipeData, Lead
+from .models import FipeVehicleType, FipeBrand, FipeModel, FipeYear, FipeFuel, FipeCodeFipe, FipePrice, Lead
 
 class FipeVehicleTypeAdmin(admin.ModelAdmin):
     list_display = ('id', 'vehicle_type')
@@ -22,9 +22,6 @@ class FipeCodeFipeAdmin(admin.ModelAdmin):
 class FipePriceAdmin(admin.ModelAdmin):
     list_display = ('id', 'price', 'model', 'brand',  'fuel')
 
-class FipeDataAdmin(admin.ModelAdmin):
-    list_display = ('id', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'codeFipe', 'price')
-
 
 class LeadAdmin(admin.ModelAdmin):
     list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'price')
@@ -38,5 +35,3 @@ admin.site.register(FipeYear, FipeYearAdmin)
 admin.site.register(FipeFuel, FipeFuelAdmin)
 admin.site.register(FipeCodeFipe, FipeCodeFipeAdmin)
 admin.site.register(FipePrice, FipePriceAdmin)
-admin.site.register(FipeData, FipeDataAdmin)
-
