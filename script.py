@@ -22,12 +22,12 @@ def make_request(endpoint, params=None):
 
 # Função para obter informações Fipe e adicionar ao banco de dados
 def fetch_and_append_data(vehicle_type, brand, model, year):
-    # Verificar se o ano do modelo é 2010 ou posterior
-    current_year = datetime.now().year
-    if int(year["code"][:4]) >= 2010 and int(year["code"][:4]) <= current_year:
+    # Adicionando filtragem para anos de modelo acima de 2009
+    if int(year["code"][:4]) > 2009:  # Ajuste aqui para incluir anos acima de 2009
         vehicle_info = make_request(f'/{vehicle_type}/brands/{brand["code"]}/models/{model["code"]}/years/{year["code"]}')
         
         if vehicle_info:
+            print(f"Processando: {vehicle_info['brand']} - {vehicle_info['model']} - Ano: {vehicle_info['modelYear']}")  # Adicionado print para monitoramento
             vehicle_type_instance, _ = FipeVehicleType.objects.get_or_create(vehicle_type="Carro")
             brand_instance, _ = FipeBrand.objects.get_or_create(brand=vehicle_info["brand"], vehicle_type=vehicle_type_instance)
             model_instance, _ = FipeModel.objects.get_or_create(model=vehicle_info["model"], brand=brand_instance)
@@ -38,7 +38,7 @@ def fetch_and_append_data(vehicle_type, brand, model, year):
 
 # Função para popular o banco de dados com informações da API Fipe
 def populate_database():
-    vehicle_types = ['cars']  # Limitar apenas a carros
+    vehicle_types = ['cars']  # Continua limitado apenas a carros
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
