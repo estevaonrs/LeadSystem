@@ -24,8 +24,19 @@ class FipePriceAdmin(admin.ModelAdmin):
 
 
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'price', 'market_category', 'car_category', 'original_price', 'pricing_percentage', 'created_at')
+    list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'formatted_price', 'market_category', 'car_category', 'formatted_original_price', 'formatted_pricing_percentage', 'created_at')
 
+    def formatted_price(self, obj):
+        return f"R$ {obj.price:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    formatted_price.short_description = 'Price'
+
+    def formatted_original_price(self, obj):
+        return f"R$ {obj.original_price:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    formatted_original_price.short_description = 'Original Price'
+
+    def formatted_pricing_percentage(self, obj):
+        return f"{obj.pricing_percentage * 100}%"
+    formatted_pricing_percentage.short_description = 'Pricing Percentage'
 
 admin.site.register(Lead, LeadAdmin)
 admin.site.register(FipeVehicleType, FipeVehicleTypeAdmin)

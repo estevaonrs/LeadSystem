@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.formats import number_format
 
 class FipeVehicleType(models.Model):
     vehicle_type = models.CharField(max_length=100)
@@ -271,3 +272,12 @@ class Lead(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email} - {self.phone}"
+
+    def formatted_price(self):
+        return "R$ " + number_format(self.price, 2, force_grouping=True, use_l10n=True)
+
+    def formatted_original_price(self):
+        return "R$ " + number_format(self.original_price, 2, force_grouping=True, use_l10n=True)
+
+    def pricing_percentage_display(self):
+        return f"{self.pricing_percentage * 100}%"
