@@ -1,23 +1,23 @@
 from django.urls import path, include
+from . import views
 from rest_framework.routers import DefaultRouter
-from django.urls import path
-from .views import show_price, get_brands, get_models, get_years, get_fuels, index_view, step_1, step_2, step_3, LeadViewSet
 
 app_name = 'fipe_app'
 
 router = DefaultRouter()
-router.register(r'leads', LeadViewSet)
+router.register(r'leads', views.LeadViewSet)
+
+
 
 urlpatterns = [
-    path('', index_view, name='index'),
-    path('step_1/', step_1, name='step_1'),
-    path('step_2/', step_2, name='step_2'),
-    path('step_3/', step_3, name='step_3'),
-    path('price/<int:lead_id>/', show_price, name='show_price'),
-    path('get_brands/<int:vehicle_type_id>/', get_brands, name='get_brands'),
-    path('get_models/<int:brand_id>/<int:vehicle_type_id>/', get_models, name='get_models'),
-    path('get_years/<int:model_id>/', get_years, name='get_years'),
-    path('get_fuels/<int:year_id>/', get_fuels, name='get_fuels'),
+    path('', views.step_1, name='step_1'),
+    path('step-2/<int:brand_id>/', views.step_2, name='step_2'),
+    path('step-3/<int:model_id>/', views.step_3, name='step_3'),
+    path('step-4/<int:year_id>/', views.step_4, name='step_4'),
+    path('step-5/<int:year_id>/', views.step_5, name='step_5'),
+    path('step-6/', views.step_6, name='step_6'),
+    path('show-price/<int:lead_id>/', views.show_price, name='show_price'),
     path('api/', include(router.urls)),
 
+    # Adicione uma URL para a página de sucesso
 ]

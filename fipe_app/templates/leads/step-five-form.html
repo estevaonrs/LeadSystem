@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selecione o Combustível</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {% for fuel in fuels %}
+            <button type="submit" name="fuel_id" value="{{ fuel.id }}">
+                {{ fuel.fuel }}
+            </button>
+        {% endfor %}
+        <input type="checkbox" name="revisions_done" value="true" {% if lead.revisions_done_in_css %} checked{% endif %}>
+<label for="revisions_done_in_css">Revisões feitas na concessionaria</label><br>
+
+<input type="checkbox" name="under_warranty" value="true" {% if lead.under_warranty %} checked{% endif %}>
+<label for="under_warranty">Na garantia</label><br>
+    </form>
+</body>
+</html>

@@ -22,21 +22,25 @@ class FipeCodeFipeAdmin(admin.ModelAdmin):
 class FipePriceAdmin(admin.ModelAdmin):
     list_display = ('id', 'price', 'model', 'brand',  'fuel')
 
+def formatted_pricing_percentage(obj):
+    percentage = obj.pricing_percentage
+    if percentage is not None:
+        return f"{percentage * 100}%"
+    return ""
+
 
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('city', 'mileage', 'name', 'email', 'phone', 'vehicle_type', 'brand', 'model', 'year', 'fuel', 'formatted_price', 'market_category', 'car_category', 'formatted_original_price', 'formatted_pricing_percentage', 'created_at')
-
-    def formatted_price(self, obj):
-        return f"R$ {obj.price:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    formatted_price.short_description = 'Price'
-
-    def formatted_original_price(self, obj):
-        return f"R$ {obj.original_price:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    formatted_original_price.short_description = 'Original Price'
+    list_display = ('mileage', 'name', 'email', 'phone', 'brand', 'model', 'year', 'fuel', 'formatted_price', 'market_category', 'car_category', 'formatted_original_price', 'formatted_pricing_percentage', 'under_warranty', 'revisions_done_in_css', 'created_at')
 
     def formatted_pricing_percentage(self, obj):
-        return f"{obj.pricing_percentage * 100}%"
-    formatted_pricing_percentage.short_description = 'Pricing Percentage'
+        percentage = obj.pricing_percentage
+        if percentage is not None:
+            return f"{percentage * 100}%"
+        return ""
+
+    formatted_pricing_percentage.short_description = "Pricing Percentage"
+
+
 
 admin.site.register(Lead, LeadAdmin)
 admin.site.register(FipeVehicleType, FipeVehicleTypeAdmin)
