@@ -10,7 +10,8 @@ router.register(r'leads', views.LeadViewSet)
 
 
 urlpatterns = [
-    path('', views.step_1, name='step_1'),
+    path('', views.index_view, name='index'),
+    path('step-1', views.step_1, name='step_1'),
     path('step-2/<int:brand_id>/', views.step_2, name='step_2'),
     path('step-3/<int:model_id>/', views.step_3, name='step_3'),
     path('step-4/<int:year_id>/', views.step_4, name='step_4'),

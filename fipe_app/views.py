@@ -196,7 +196,7 @@ def step_6(request):
         # Categorias de mercado
         ruim_mercado = ['NSX 3.0']
         queimados = ['Integra GS 1.8']
-        valorizar_modelos = ['Legend 3.2/3.5']
+        valorizar_modelos = ['MARRUÁ AM 100 2.8 CD TDI Diesel']
 
         market_category = None
         if model.model in ruim_mercado:
@@ -284,3 +284,8 @@ class LeadViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Se você quiser filtrar os dados, pode fazer isso aqui
         return self.queryset
+
+
+def index_view(request):
+    return render(request, 'leads/index.html')
+

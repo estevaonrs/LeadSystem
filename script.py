@@ -23,7 +23,7 @@ def make_request(endpoint, params=None):
 # Função para obter informações Fipe e adicionar ao banco de dados
 def fetch_and_append_data(vehicle_type, brand, model, year):
     # Adicionando filtragem para anos de modelo acima de 2009
-    if int(year["code"][:4]) > 2009:  # Ajuste aqui para incluir anos acima de 2009
+    if int(year["code"][:4]) > 2014:  # Ajuste aqui para incluir anos acima de 2009
         vehicle_info = make_request(f'/{vehicle_type}/brands/{brand["code"]}/models/{model["code"]}/years/{year["code"]}')
         
         if vehicle_info:
